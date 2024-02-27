@@ -11,11 +11,11 @@ const auth = useContext(AuthContext);
         password: ''
 
     });
-    const [err, setErr] = useState("")
-    const handleError = (e) => {
-        setErr(e);
+    const [msg, setMsg] = useState("")
+    const handleMsg = (e) => {
+        setMsg(e);
         setTimeout( ()=>{
-            setErr("")
+            setMsg("")
         }, 3000)
     }
     const handleChange = e => {
@@ -34,11 +34,12 @@ const auth = useContext(AuthContext);
 
         axios.post(url, data)
             .then((response) => {
+                handleMsg("Registered successfully, procced to login.")
                 console.log('Success:', response.data);
                 
             })
             .catch((error) => {
-                handleError(error.response.data.message)
+                handleMsg(error.response.data.message)
                 console.error('Error:', error);
             });
 
@@ -55,10 +56,12 @@ const auth = useContext(AuthContext);
 
         axios.post(url, data)
             .then((response) => {
+                handleMsg("login success")
+
                 auth.login(response.data.token)
             })
             .catch((error) => {
-                setErr(error.response.data.message)
+                handleMsg(error.response.data.message)
                 console.error('Error:', error);
             });
 
@@ -118,7 +121,7 @@ const auth = useContext(AuthContext);
                             />
                         </div>
                     </div>
-                    {err && <p className='text-red-500'>{err} </p>}
+                    {msg && <p className='text-red-500'>{msg} </p>}
                     <div>
                         <button
                             type="submit"

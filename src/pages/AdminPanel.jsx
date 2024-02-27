@@ -6,13 +6,27 @@ import { AuthContext } from '../contexts/AuthContext';
 import { useContext } from 'react';
 import UserManagement from '../components/UsersManagement';
 import BotConfig from '../components/BotConfig';
-
+import axios from 'axios';
 const AdminPanel = () => {
 
 
     const auth = useContext(AuthContext);
     
-
+    const handleLogout = () => {
+        const url = 'http://localhost:3000/api/users/logout';
+            axios.get(url, {
+                headers: {
+                    'Authorization': `Bearer ${auth.token}`
+                }
+            })
+                .then((response) => {
+                    auth.logout()
+                    console.log('Success:', response.data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                })
+    }
     useEffect(() => {
         auth.refresh();
     }, [])
@@ -22,7 +36,7 @@ const AdminPanel = () => {
         <div className='w-screen h-screen px-[2rem] flex flex-col'>
             <div className='flex flex-row justify-between items-center px-[1rem] h-[4rem]'>
                 <h1 className='text-2xl font-bold'>Admin Panel</h1>
-                <button onClick={() => auth.logout()} className="py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <button onClick={handleLogout} className="py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Logout
                 </button>
             </div>

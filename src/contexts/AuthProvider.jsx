@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }) => {
         console.log('Success:', response.data);
       })
       .catch((error) => {
+        logout();
         console.error('Error:', error);
       })
   }
